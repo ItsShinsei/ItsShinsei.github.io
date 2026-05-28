@@ -73,9 +73,9 @@ sections.forEach(s => sectionObserver.observe(s));
 window.addEventListener('scroll', () => {
   const navbar = document.getElementById('navbar');
   if (window.scrollY > 20) {
-    navbar.style.background = 'rgba(10,10,15,.95)';
+    navbar.style.boxShadow = '0 10px 35px rgba(0,0,0,.04)';
   } else {
-    navbar.style.background = 'rgba(10,10,15,.85)';
+    navbar.style.boxShadow = 'none';
   }
 }, { passive: true });
 
