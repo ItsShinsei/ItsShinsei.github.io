@@ -95,3 +95,66 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     window.scrollTo({ top, behavior: 'smooth' });
   });
 });
+
+/* ===========================
+   CERTIFICATION: MORPH / OVERLAY
+   =========================== */
+// Create overlay element once
+const certOverlay = document.createElement('div');
+certOverlay.className = 'cert-overlay';
+certOverlay.innerHTML = `
+  <div class="inner" role="dialog" aria-modal="true">
+    <img src="" alt="certificate preview">
+  </div>
+  <button class="close" aria-label="Tutup">✕</button>
+`;
+document.body.appendChild(certOverlay);
+
+const overlayImg = certOverlay.querySelector('img');
+const overlayClose = certOverlay.querySelector('.close');
+
+function openCertOverlay(imgSrc, alt) {
+  overlayImg.src = imgSrc;
+  overlayImg.alt = alt || 'Sertifikat';
+  certOverlay.classList.add('show');
+  // fade original card info
+}
+
+function closeCertOverlay() {
+  certOverlay.classList.remove('show');
+  overlayImg.src = '';
+}
+
+document.querySelectorAll('.cert-card').forEach(card => {
+  card.addEventListener('click', (e) => {
+    // ignore if clicking link inside
+    if (e.target.closest('a, button')) return;
+    const img = card.querySelector('img');
+    if (!img) return;
+    // mark info dim
+    const info = card.querySelector('.cert-info');
+    if (info) info.classList.add('dim');
+    openCertOverlay(img.src, img.alt);
+  });
+});
+
+overlayClose.addEventListener('click', () => {
+  closeCertOverlay();
+  document.querySelectorAll('.cert-info.dim').forEach(i => i.classList.remove('dim'));
+});
+
+certOverlay.addEventListener('click', (e) => {
+  if (e.target === certOverlay) {
+    closeCertOverlay();
+    document.querySelectorAll('.cert-info.dim').forEach(i => i.classList.remove('dim'));
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (certOverlay.classList.contains('show')) {
+      closeCertOverlay();
+      document.querySelectorAll('.cert-info.dim').forEach(i => i.classList.remove('dim'));
+    }
+  }
+});
